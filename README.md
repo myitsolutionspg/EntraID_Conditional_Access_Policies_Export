@@ -45,9 +45,8 @@ EntraID_CAPolicies_Export.ps1
 Main export script.
 
 - sample-output/EntraID_CA_Policies_Sample.html
-Sample report with fake tenant data, for documentation and screenshots.
+  Sample report with fake tenant data, for documentation and screenshots.
 - .gitignore
-Ignores transient exports and workspace clutter.
+  Ignores transient exports and workspace clutter.
 - LICENSE
-MIT licence for this project.
-"@ | Set-Content -Encoding utf8 README.md
+  MIT licence for this project.
