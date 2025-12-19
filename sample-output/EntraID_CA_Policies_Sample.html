@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Entra ID Conditional Access Policies - SAMPLE</title>
+<style>
+    :root {
+        --bg-main: #f3f4f6;
+        --bg-header: #111827;
+        --bg-header-accent: #1f2937;
+        --bg-footer: #111827;
+        --card-bg: #ffffff;
+        --border-color: #d1d5db;
+        --text-main: #111827;
+        --text-muted: #4b5563;
+        --text-invert: #f9fafb;
+        --pill-enabled: #065f46;
+        --pill-report: #92400e;
+        --pill-disabled: #7f1d1d;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Segoe UI, Arial, sans-serif;
+        font-size: 14px;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+    }
+
+    .page-header {
+        background: linear-gradient(90deg, var(--bg-header), var(--bg-header-accent));
+        color: var(--text-invert);
+        padding: 12px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #000;
+    }
+
+    .header-left h1 {
+        margin: 0;
+        font-size: 20px;
+    }
+
+    .header-left p,
+    .header-right p {
+        margin: 2px 0;
+        font-size: 14px;
+        color: #e5e7eb;
+    }
+
+    .header-right {
+        text-align: right;
+    }
+
+    .main-content {
+        padding: 16px 20px 40px 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    table {
+        border-collapse: collapse;
+        margin-top: 6px;
+        margin-bottom: 12px;
+        width: 100%;
+        background-color: var(--card-bg);
+    }
+
+    th, td {
+        border: 1px solid var(--border-color);
+        padding: 4px 8px;
+        vertical-align: top;
+    }
+
+    th {
+        background-color: #f3f4f6;
+        text-align: left;
+    }
+
+    .section-title {
+        background-color: #e5e7eb;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .policy-index {
+        margin-bottom: 12px;
+    }
+
+    .policy-index tr[data-policy-id] {
+        cursor: pointer;
+    }
+
+    .policy-index tr[data-policy-id]:hover {
+        background-color: #e5e7eb;
+    }
+
+    .pill {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #f9fafb;
+    }
+
+    .pill-enabled {
+        background-color: var(--pill-enabled);
+    }
+
+    .pill-report {
+        background-color: var(--pill-report);
+    }
+
+    .pill-disabled {
+        background-color: var(--pill-disabled);
+    }
+
+    .muted {
+        color: var(--text-muted);
+        font-style: italic;
+    }
+
+    .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 6px 0 8px 0;
+        align-items: center;
+    }
+
+    .toolbar input {
+        padding: 4px 8px;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+        font-size: 14px;
+        min-width: 220px;
+    }
+
+    .toolbar button {
+        padding: 4px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+        background-color: #ffffff;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .toolbar button:hover {
+        background-color: #e5e7eb;
+    }
+
+    .info-banner {
+        margin: 4px 0 14px 0;
+        padding: 6px 10px;
+        font-size: 14px;
+        background-color: #e0f2fe;
+        color: #0f172a;
+        border: 1px solid #93c5fd;
+        border-left-width: 4px;
+        border-radius: 6px;
+    }
+
+    .policy-block {
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        margin-bottom: 16px;
+        background-color: #ffffff;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+
+    .policy-header {
+        position: relative;
+        padding: 8px 12px;
+        padding-left: 26px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        background-color: #f9fafb;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .toggle-icon {
+        position: absolute;
+        left: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 14px;
+        line-height: 1;
+        user-select: none;
+        transition: transform 0.15s ease-out;
+    }
+
+    .policy-block.expanded .toggle-icon {
+        transform: translateY(-50%) rotate(90deg);
+    }
+
+    .policy-header-main {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .policy-title {
+        font-weight: 600;
+    }
+
+    .policy-id {
+        font-size: 10px;
+        color: var(--text-muted);
+    }
+
+    .policy-content {
+        padding: 6px 12px 10px 12px;
+        display: none;
+    }
+
+    .policy-block.expanded .policy-content {
+        display: block;
+    }
+
+    .page-footer {
+        background-color: var(--bg-footer);
+        color: var(--text-invert);
+        text-align: center;
+        padding: 8px 12px;
+        font-size: 14px;
+        border-top: 1px solid #000;
+        position: sticky;
+        bottom: 0;
+    }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="header-left">
+    <h1>Entra ID Conditional Access Policies</h1>
+    <p>Tenant: contoso.onmicrosoft.com</p>
+    <p>Tenant ID: 11111111-2222-3333-4444-555555555555</p>
+  </div>
+  <div class="header-right">
+    <p>Generated: 2025-01-01 12:00:00</p>
+    <p>Report file: EntraID_CA_Policies_Sample.html</p>
+  </div>
+</div>
+
+<div class="main-content">
+  <h2>Policy Index</h2>
+  <table class="policy-index">
+    <tr>
+      <th>Name</th>
+      <th>State</th>
+      <th>Policy Id</th>
+    </tr>
+    <tr data-policy-id="00000000-0000-0000-0000-000000000001">
+      <td>CA01 - Require MFA for all users</td>
+      <td><span class="pill pill-enabled">enabled</span></td>
+      <td>00000000-0000-0000-0000-000000000001</td>
+    </tr>
+    <tr data-policy-id="00000000-0000-0000-0000-000000000002">
+      <td>CA02 - Block legacy authentication (basic / legacy protocols)</td>
+      <td><span class="pill pill-enabled">enabled</span></td>
+      <td>00000000-0000-0000-0000-000000000002</td>
+    </tr>
+    <tr data-policy-id="00000000-0000-0000-0000-000000000003">
+      <td>CA03 - Require MFA for privileged admin roles</td>
+      <td><span class="pill pill-report">enabledForReportingButNotEnforced</span></td>
+      <td>00000000-0000-0000-0000-000000000003</td>
+    </tr>
+    <tr data-policy-id="00000000-0000-0000-0000-000000000010">
+      <td>CA10 - Block sign-in from non-approved locations</td>
+      <td><span class="pill pill-disabled">disabled</span></td>
+      <td>00000000-0000-0000-0000-000000000010</td>
+    </tr>
+  </table>
+
+  <div class="toolbar">
+    <input type="text" id="policySearch" placeholder="Filter policies by name..." oninput="filterPolicies()" />
+    <button type="button" onclick="expandAll()">Expand all</button>
+    <button type="button" onclick="collapseAll()">Collapse all</button>
+  </div>
+
+  <div class="info-banner">
+    Tip: Click a policy in the index to jump to it. Use the arrow icon or the policy header to expand or collapse details.
+    You can also use the "Expand all" and "Collapse all" buttons for bulk actions.
+  </div>
+
+  <!-- CA01 -->
+  <div class="policy-block collapsed" id="policy-00000000-0000-0000-0000-000000000001">
+    <div class="policy-header" onclick="togglePolicy('policy-00000000-0000-0000-0000-000000000001')">
+      <span class="toggle-icon">&#9654;</span>
+      <div class="policy-header-main">
+        <span class="policy-title">CA01 - Require MFA for all users</span>
+        <span class="policy-id">Id: 00000000-0000-0000-0000-000000000001</span>
+      </div>
+      <span class="pill pill-enabled">enabled</span>
+    </div>
+    <div class="policy-content">
+      <table>
+        <tr><th class="section-title" colspan="2">Summary</th></tr>
+        <tr><th>Description</th><td>Baseline policy enforcing MFA for all interactive sign-ins.</td></tr>
+        <tr><th>Created</th><td>01/01/2025 10:00:00</td></tr>
+        <tr><th>Modified</th><td>01/01/2025 11:00:00</td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Assignments - Users</th></tr>
+        <tr><th>Include Users</th><td>All</td></tr>
+        <tr><th>Exclude Users</th><td>00000000-0000-0000-0000-00000000AA01  <!-- sample break-glass --></td></tr>
+        <tr><th>Include Groups</th><td></td></tr>
+        <tr><th>Exclude Groups</th><td>00000000-0000-0000-0000-00000000BB01  <!-- sample excluded group --></td></tr>
+        <tr><th>Include Roles</th><td></td></tr>
+        <tr><th>Exclude Roles</th><td></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Assignments - Cloud apps &amp; Actions</th></tr>
+        <tr><th>Include Apps</th><td>All</td></tr>
+        <tr><th>Exclude Apps</th><td></td></tr>
+        <tr><th>Include User Actions</th><td></td></tr>
+        <tr><th>Auth Context IDs</th><td></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Conditions</th></tr>
+        <tr><th>Client App Types</th><td>all</td></tr>
+        <tr><th>Include Locations</th><td>All</td></tr>
+        <tr><th>Exclude Locations</th><td>00000000-0000-0000-0000-00000000CC01  <!-- e.g. trusted corporate network --></td></tr>
+        <tr><th>Platforms</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Device Filter</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Sign-in Risk</th><td></td></tr>
+        <tr><th>User Risk</th><td></td></tr>
+        <tr><th>Authentication Flows</th><td><span class="muted">Not configured</span></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Access Controls - Grant</th></tr>
+        <tr><th>Built-in Controls</th><td>mfa</td></tr>
+        <tr><th>Custom Auth Factors</th><td></td></tr>
+        <tr><th>Terms of Use</th><td></td></tr>
+        <tr><th>Operator</th><td>OR</td></tr>
+        <tr><th>Authentication Strength Id</th><td></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Access Controls - Session</th></tr>
+        <tr><th>Application Enforced Restrictions</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Cloud App Security</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Persistent Browser</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Sign-in Frequency</th><td><span class="muted">Not configured</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- CA02 -->
+  <div class="policy-block collapsed" id="policy-00000000-0000-0000-0000-000000000002">
+    <div class="policy-header" onclick="togglePolicy('policy-00000000-0000-0000-0000-000000000002')">
+      <span class="toggle-icon">&#9654;</span>
+      <div class="policy-header-main">
+        <span class="policy-title">CA02 - Block legacy authentication (basic / legacy protocols)</span>
+        <span class="policy-id">Id: 00000000-0000-0000-0000-000000000002</span>
+      </div>
+      <span class="pill pill-enabled">enabled</span>
+    </div>
+    <div class="policy-content">
+      <table>
+        <tr><th class="section-title" colspan="2">Summary</th></tr>
+        <tr><th>Description</th><td>Blocks legacy client app types such as basic auth and older Exchange protocols.</td></tr>
+        <tr><th>Created</th><td>01/01/2025 10:05:00</td></tr>
+        <tr><th>Modified</th><td>01/01/2025 11:05:00</td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Assignments - Users</th></tr>
+        <tr><th>Include Users</th><td>All</td></tr>
+        <tr><th>Exclude Users</th><td></td></tr>
+        <tr><th>Include Groups</th><td></td></tr>
+        <tr><th>Exclude Groups</th><td>00000000-0000-0000-0000-00000000BB01</td></tr>
+        <tr><th>Include Roles</th><td></td></tr>
+        <tr><th>Exclude Roles</th><td></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Assignments - Cloud apps &amp; Actions</th></tr>
+        <tr><th>Include Apps</th><td>All</td></tr>
+        <tr><th>Exclude Apps</th><td></td></tr>
+        <tr><th>Include User Actions</th><td></td></tr>
+        <tr><th>Auth Context IDs</th><td></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Conditions</th></tr>
+        <tr><th>Client App Types</th><td>exchangeActiveSync<br/>other</td></tr>
+        <tr><th>Include Locations</th><td></td></tr>
+        <tr><th>Exclude Locations</th><td></td></tr>
+        <tr><th>Platforms</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Device Filter</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Sign-in Risk</th><td></td></tr>
+        <tr><th>User Risk</th><td></td></tr>
+        <tr><th>Authentication Flows</th><td><span class="muted">Not configured</span></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Access Controls - Grant</th></tr>
+        <tr><th>Built-in Controls</th><td>block</td></tr>
+        <tr><th>Custom Auth Factors</th><td></td></tr>
+        <tr><th>Terms of Use</th><td></td></tr>
+        <tr><th>Operator</th><td>OR</td></tr>
+        <tr><th>Authentication Strength Id</th><td></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Access Controls - Session</th></tr>
+        <tr><th>Application Enforced Restrictions</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Cloud App Security</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Persistent Browser</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Sign-in Frequency</th><td><span class="muted">Not configured</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- CA03 -->
+  <div class="policy-block collapsed" id="policy-00000000-0000-0000-0000-000000000003">
+    <div class="policy-header" onclick="togglePolicy('policy-00000000-0000-0000-0000-000000000003')">
+      <span class="toggle-icon">&#9654;</span>
+      <div class="policy-header-main">
+        <span class="policy-title">CA03 - Require MFA for privileged admin roles</span>
+        <span class="policy-id">Id: 00000000-0000-0000-0000-000000000003</span>
+      </div>
+      <span class="pill pill-report">enabledForReportingButNotEnforced</span>
+    </div>
+    <div class="policy-content">
+      <table>
+        <tr><th class="section-title" colspan="2">Summary</th></tr>
+        <tr><th>Description</th><td>MFA requirement targeted at high-privilege roles (directory, security, global admins, etc.).</td></tr>
+        <tr><th>Created</th><td>01/01/2025 10:10:00</td></tr>
+        <tr><th>Modified</th><td>01/01/2025 11:10:00</td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Assignments - Users</th></tr>
+        <tr><th>Include Users</th><td></td></tr>
+        <tr><th>Exclude Users</th><td></td></tr>
+        <tr><th>Include Groups</th><td></td></tr>
+        <tr><th>Exclude Groups</th><td>00000000-0000-0000-0000-00000000BB01</td></tr>
+        <tr><th>Include Roles</th>
+          <td>
+            22222222-0000-0000-0000-000000000001<br/>
+            22222222-0000-0000-0000-000000000002<br/>
+            22222222-0000-0000-0000-000000000003
+          </td>
+        </tr>
+        <tr><th>Exclude Roles</th><td></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Assignments - Cloud apps &amp; Actions</th></tr>
+        <tr><th>Include Apps</th><td>All</td></tr>
+        <tr><th>Exclude Apps</th><td></td></tr>
+        <tr><th>Include User Actions</th><td></td></tr>
+        <tr><th>Auth Context IDs</th><td></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Conditions</th></tr>
+        <tr><th>Client App Types</th><td>all</td></tr>
+        <tr><th>Include Locations</th><td></td></tr>
+        <tr><th>Exclude Locations</th><td></td></tr>
+        <tr><th>Platforms</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Device Filter</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Sign-in Risk</th><td></td></tr>
+        <tr><th>User Risk</th><td></td></tr>
+        <tr><th>Authentication Flows</th><td><span class="muted">Not configured</span></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Access Controls - Grant</th></tr>
+        <tr><th>Built-in Controls</th><td>mfa</td></tr>
+        <tr><th>Custom Auth Factors</th><td></td></tr>
+        <tr><th>Terms of Use</th><td></td></tr>
+        <tr><th>Operator</th><td>OR</td></tr>
+        <tr><th>Authentication Strength Id</th><td>00000000-0000-0000-0000-000000000004 <!-- e.g. phishing-resistant strength --></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Access Controls - Session</th></tr>
+        <tr><th>Application Enforced Restrictions</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Cloud App Security</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Persistent Browser</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Sign-in Frequency</th>
+          <td>
+            AuthenticationType: primaryAndSecondaryAuthentication<br/>
+            FrequencyInterval: timeBased<br/>
+            IsEnabled: Yes<br/>
+            Type: days<br/>
+            Value: 1
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- CA10 -->
+  <div class="policy-block collapsed" id="policy-00000000-0000-0000-0000-000000000010">
+    <div class="policy-header" onclick="togglePolicy('policy-00000000-0000-0000-0000-000000000010')">
+      <span class="toggle-icon">&#9654;</span>
+      <div class="policy-header-main">
+        <span class="policy-title">CA10 - Block sign-in from non-approved locations</span>
+        <span class="policy-id">Id: 00000000-0000-0000-0000-000000000010</span>
+      </div>
+      <span class="pill pill-disabled">disabled</span>
+    </div>
+    <div class="policy-content">
+      <table>
+        <tr><th class="section-title" colspan="2">Summary</th></tr>
+        <tr><th>Description</th><td>Example location-based policy that would block sign-in outside defined named locations.</td></tr>
+        <tr><th>Created</th><td>01/01/2025 10:20:00</td></tr>
+        <tr><th>Modified</th><td>01/01/2025 11:20:00</td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Assignments - Users</th></tr>
+        <tr><th>Include Users</th><td>All</td></tr>
+        <tr><th>Exclude Users</th><td></td></tr>
+        <tr><th>Include Groups</th><td></td></tr>
+        <tr><th>Exclude Groups</th><td>00000000-0000-0000-0000-00000000BB02 <!-- e.g. privileged exempt group --></td></tr>
+        <tr><th>Include Roles</th><td></td></tr>
+        <tr><th>Exclude Roles</th><td></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Assignments - Cloud apps &amp; Actions</th></tr>
+        <tr><th>Include Apps</th><td>All</td></tr>
+        <tr><th>Exclude Apps</th><td></td></tr>
+        <tr><th>Include User Actions</th><td></td></tr>
+        <tr><th>Auth Context IDs</th><td></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Conditions</th></tr>
+        <tr><th>Client App Types</th><td>all</td></tr>
+        <tr><th>Include Locations</th><td>All</td></tr>
+        <tr><th>Exclude Locations</th><td>00000000-0000-0000-0000-00000000CC01 <!-- trusted location --></td></tr>
+        <tr><th>Platforms</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Device Filter</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Sign-in Risk</th><td></td></tr>
+        <tr><th>User Risk</th><td></td></tr>
+        <tr><th>Authentication Flows</th><td><span class="muted">Not configured</span></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Access Controls - Grant</th></tr>
+        <tr><th>Built-in Controls</th><td>block</td></tr>
+        <tr><th>Custom Auth Factors</th><td></td></tr>
+        <tr><th>Terms of Use</th><td></td></tr>
+        <tr><th>Operator</th><td>OR</td></tr>
+        <tr><th>Authentication Strength Id</th><td></td></tr>
+      </table>
+
+      <table>
+        <tr><th class="section-title" colspan="2">Access Controls - Session</th></tr>
+        <tr><th>Application Enforced Restrictions</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Cloud App Security</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Persistent Browser</th><td><span class="muted">Not configured</span></td></tr>
+        <tr><th>Sign-in Frequency</th><td><span class="muted">Not configured</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+</div> <!-- /main-content -->
+
+<div class="page-footer">
+  <p>Sample Conditional Access snapshot generated by the Entra ID CA export script (sample data only).</p>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Click index row to scroll to policy
+  var rows = document.querySelectorAll('.policy-index tr[data-policy-id]');
+  rows.forEach(function (row) {
+    row.addEventListener('click', function () {
+      var id = row.getAttribute('data-policy-id');
+      var block = document.getElementById('policy-' + id);
+      if (block) {
+        block.classList.add('expanded');
+        var y = block.getBoundingClientRect().top + window.pageYOffset - 80;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    });
+  });
+});
+
+function togglePolicy(blockId) {
+  var block = document.getElementById(blockId);
+  if (!block) return;
+  block.classList.toggle('expanded');
+}
+
+function expandAll() {
+  document.querySelectorAll('.policy-block').forEach(function (block) {
+    block.classList.add('expanded');
+    block.style.display = '';
+  });
+}
+
+function collapseAll() {
+  document.querySelectorAll('.policy-block').forEach(function (block) {
+    block.classList.remove('expanded');
+    block.style.display = '';
+  });
+}
+
+function filterPolicies() {
+  var term = document.getElementById('policySearch').value.toLowerCase();
+  var rows = document.querySelectorAll('.policy-index tr[data-policy-id]');
+
+  rows.forEach(function (row) {
+    var nameCell = row.querySelector('td');
+    var id = row.getAttribute('data-policy-id');
+    var block = document.getElementById('policy-' + id);
+
+    if (!nameCell) return;
+
+    var name = nameCell.innerText.toLowerCase();
+    var match = name.indexOf(term) !== -1 || term === '';
+
+    row.style.display = match ? '' : 'none';
+    if (block) {
+      block.style.display = match ? '' : 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>

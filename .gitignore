@@ -1,0 +1,20 @@
+@"
+# Windows junk
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Editor settings
+.vscode/
+
+# Logs / temp
+*.log
+*.tmp
+*.bak
+
+# Generated HTML reports in repo root – ignore all exports
+/EntraID_CA_Policies_*.html
+
+# But keep the sample output in the sample-output folder
+!sample-output/EntraID_CA_Policies_Sample.html
+"@ | Set-Content -Encoding utf8 .gitignore
