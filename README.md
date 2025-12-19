@@ -15,21 +15,22 @@ The report includes:
 - PowerShell 5.1 or 7+
 - Microsoft Graph PowerShell SDK with permissions to read CA policies (for example `Policy.Read.All`)
 
-Install Graph (once per machine/profile):
+## Install Graph (once per machine/profile):
 
 ```powershell
 Install-Module Microsoft.Graph -Scope CurrentUser
+```
 
 ## Usage
 
 1. Open PowerShell in this folder:
 ```powershell
     cd C:\Dev\Git\EntraID_CA_Policies_Export
-
+```
 2. Run the export script:
 ```powershell
     .\EntraID_CAPolicies_Export.ps1
-
+```
 3. Sign in when prompted.
 
 4. The script will create a file in the same folder:
