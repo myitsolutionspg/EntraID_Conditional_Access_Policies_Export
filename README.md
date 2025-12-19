@@ -10,6 +10,9 @@ The report includes:
 - Cloud apps & user actions
 - Conditions, grant controls and session controls
 
+Useful for audits, SCuBA baseline reviews, and quick CA documentation exports.
+![Sample CA report](docs/ca-report.png)
+
 ## Requirements
 
 - PowerShell 5.1 or 7+
