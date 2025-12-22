@@ -45,23 +45,28 @@ Install-Module Microsoft.Graph -Scope CurrentUser
 ```
 
 ## Usage
+1. Open PowerShell and change into the folder where you cloned or extracted the repo:
 
-1. Open PowerShell in this folder:
-```powershell
-    cd C:\Dev\Git\EntraID_CA_Policies_Export
-```
-2. Run the export script:
-```powershell
+   For example, if you cloned it to C:\Temp\EntraID_CA_Policies_Export:
+
+   ```powershell
+    cd C:\Temp\EntraID_CA_Policies_Export
+   ```
+ 
+2. (First time only) Install the Graph module if needed:
+   ```powershell
+   Install-Module Microsoft.Graph -Scope CurrentUser
+   ```
+
+3. Run the export script:
+
+   ```powershell
     .\EntraID_CAPolicies_Export.ps1
-```
-3. Sign in when prompted.
-
-4. The script will create a file in the same folder:
-
-    EntraID_CA_Policies_YYYY-MM-DD_HHMM.html
-
-Open that file in a browser to view the report.
-
+   ```
+ 
+4. Sign in when prompted.
+5. Open the generated EntraID_CA_Policies_YYYY-MM-DD_HHMM.html in a browser.
+---
 ## Files
 
 EntraID_CAPolicies_Export.ps1
