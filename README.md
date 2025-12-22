@@ -13,6 +13,26 @@ The report includes:
 Useful for audits, SCuBA baseline reviews, and quick CA documentation exports.
 ![Sample CA report](docs/ca-report.png)
 
+
+## Licensing requirements for Microsoft Entra Conditional Access (P1/P2)
+
+This script only reads and reports your Conditional Access (CA) configuration, but the **CA features themselves** require the right Microsoft Entra ID licenses.
+
+- **Microsoft Entra ID P1 (Premium 1)** – minimum for standard Conditional Access:
+  - Core CA policies such as MFA enforcement, device-compliance checks, sign-in location rules, and basic app access controls.
+- **Microsoft Entra ID P2 (Premium 2)** – includes everything in P1 plus advanced features:
+  - Identity Protection (risk-based policies like blocking risky sign-ins or requiring MFA for risky users)
+  - Privileged Identity Management (PIM) and other high-privilege governance features.
+
+These licenses can be obtained either **as standalone Entra ID P1/P2** or as part of bundles such as:
+
+- **Microsoft 365 Business Premium** – includes Entra ID P1 capabilities.
+- **Microsoft 365 E3** – includes Entra ID P1.
+- **Microsoft Entra (P1/P2) suites** – provide broader identity and security capabilities.
+
+> **Important:** Every user who is *in scope of a Conditional Access policy* should have the appropriate Entra ID license assigned for compliance with Microsoft licensing terms.
+
+
 ## Requirements
 
 - PowerShell 5.1 or 7+
